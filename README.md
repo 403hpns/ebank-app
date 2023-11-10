@@ -29,11 +29,12 @@ docker-compose up --build
 <h2>To-do List</h2>
 
 | Feature | Description | Finished |
-| --- | --------------------- | - |
-| Code refactoring | | nope |
-| Blocking cards | Add option to block cards | yup |
-| Closing cards | Add option to close cards | yup |
-| Changing card names | Add option to change card name | nope |
+| --- | --------------------- | :----: |
+| Code refactoring | | ❌ |
+| Blocking cards | Add option to block cards | ✅ |
+| Closing cards | Add option to close cards | ✅ |
+| Changing card names | Add option to change card name | ❌ |
+| Mobile version | Application was developed following a PC-first approach. I intentionally did not focus on mobile devices, because that wasn't my goal, but version supporting mobile devices is in the plans. | ❌
 
 <h2>Screenshots</h2>
 
