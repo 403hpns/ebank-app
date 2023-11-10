@@ -23,7 +23,7 @@ npm run dev
 or
 
 ```
-docker run -p 3000:3000 ebank
+docker-compose up --build
 ```
 
 <h2>To-do List</h2>
