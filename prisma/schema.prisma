@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  login     String   @unique
+  password  String
+  email     String   @unique
+  avatarUrl String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relation helpers
+  bankAccounts BankAccount[]
+  cards        Cards[]
+  loans        Loans[]
+  insurance    Insurance[]
+
+  targetTransfers Transfers[] @relation("TargetUser")
+  senderTransfers Transfers[] @relation("SenderUser")
+
+  @@map("users")
+}
+
+model BankAccount {
+  id            Int      @id @default(autoincrement())
+  owner         User     @relation(fields: [ownerId], references: [id])
+  accountNumber String   @unique @map("account_number")
+  accountName   String   @map("account_name")
+  balance       Int      @default(1000)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // Relation helpers
+  ownerId               Int
+  transferSenderAccount Transfers[] @relation("SenderAccount")
+  transferTargetAccount Transfers[] @relation("TargetAccount")
+  cards                 Cards[]     @relation("CardOwner")
+  loans                 Loans[]     @relation("LoanBankAccount")
+
+  @@map("bank_accounts")
+}
+
+enum CardTypes {
+  BLACK
+  BLUE
+  PURPLE
+}
+
+model Cards {
+  id         Int         @id @default(autoincrement())
+  owner      BankAccount @relation("CardOwner", fields: [accountId], references: [accountNumber])
+  number     String      @unique
+  name       String      @default("e-Bank Card") @map("card_name")
+  active     Boolean?    @default(true) @map("active")
+  expireDate DateTime    @map("expire_date")
+  ccv        Int
+  pin        String
+  color      CardTypes   @default(BLACK)
+  createdAt  DateTime    @default(now()) @map("created_at")
+  updatedAt  DateTime    @updatedAt @map("updated_at")
+
+  // Relation helpers
+  userId    Int?
+  accountId String
+  user      User?  @relation(fields: [userId], references: [id])
+
+  @@map("cards")
+}
+
+model Loans {
+  id                Int         @id @default(autoincrement())
+  target            User        @relation(fields: [borrowerId], references: [id])
+  targetBankAccount BankAccount @relation("LoanBankAccount", fields: [targetBankAccountNumber], references: [accountNumber])
+  amount            Int
+  createdAt         DateTime    @default(now()) @map("created_at")
+  updatedAt         DateTime    @updatedAt @map("updated_at")
+
+  // Relation helpers
+  borrowerId              Int
+  targetBankAccountNumber String @unique
+
+  @@map("loans")
+}
+
+enum TransferType {
+  INCOMING
+  OUTGOING
+}
+
+model Transfers {
+  id         Int          @id @default(autoincrement())
+  sender     BankAccount? @relation("SenderAccount", fields: [senderAccount], references: [accountNumber])
+  target     BankAccount? @relation("TargetAccount", fields: [targetAccount], references: [accountNumber])
+  senderUser User?        @relation("SenderUser", fields: [senderUserId], references: [id])
+  targetUser User?        @relation("TargetUser", fields: [targetUserId], references: [id])
+  amount     Int
+  title      String
+  type       TransferType
+  createdAt  DateTime     @default(now()) @map("created_at")
+  updatedAt  DateTime     @updatedAt @map("updated_at")
+
+  // Relation helpers
+  senderAccount String
+  targetAccount String
+  senderUserId  Int
+  targetUserId  Int
+
+  @@map("transfers")
+}
+
+model Insurance {
+  id            Int     @id @default(autoincrement())
+  owner         User    @relation(fields: [ownerLogin], references: [login])
+  lifeInsurance Boolean @map("life_insurance")
+  carInsurance  Boolean @map("car_insurance")
+
+  // Relation helpers
+  ownerLogin String @unique
+
+  @@map("insurance")
+}
