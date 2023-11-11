@@ -16,16 +16,15 @@ export async function POST(req: NextRequest): Promise<any> {
   });
 
   if (!user) {
-    return null;
+    return NextResponse.json("An error occurred while fetching user data.", {
+      status: 400,
+    });
   }
 
   if (user.bankAccounts.length === 7) {
-    return new Response("Sorry, but you can only have 7 accounts!", {
+    return new NextResponse("Sorry, but you can only have 7 accounts!", {
       status: 405,
     });
-    // return new NextResponse("Sorry, but you can only have 7 accounts!", {
-    //   status: 405,
-    // });
   }
 
   const newAccountNumber = await generateAccountNumber(26, userId);
@@ -37,6 +36,12 @@ export async function POST(req: NextRequest): Promise<any> {
       accountName: accountName,
     },
   });
+
+  if (!newAccount) {
+    return NextResponse.json("An error occurred while creating the account.", {
+      status: 400,
+    });
+  }
 
   // dorobić że się tworzy loan z false
 
