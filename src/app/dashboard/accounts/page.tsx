@@ -54,7 +54,7 @@ const Accounts = async () => {
         <div className="border-b text-center font-semibold">
           List of your all bank accounts
         </div>
-        <div className="flex max-h-[300px] flex-col items-center gap-2 overflow-x-hidden overflow-y-scroll bg-red-500">
+        <div className="flex max-h-[300px] flex-col items-center gap-2 overflow-x-hidden overflow-y-scroll">
           {Array.isArray(data) && data?.length ? (
             <>
               {data?.map((acc: any) => (
