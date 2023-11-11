@@ -1,19 +1,28 @@
-FROM node:18-alpine
+FROM node:alpine AS builder
+
 WORKDIR /app
 
-COPY package*.json ./
+COPY package*.json .
 COPY prisma ./prisma/
+
 RUN npm install
 
-RUN npm install bcrypt
-RUN npm install -D @types/bcrypt
-
 COPY . .
-
-RUN npx prisma generate
+COPY tsconfig.json .
 
 RUN npm run build
-COPY .next/ ./.next/
 
-EXPOSE 3000:3000
-CMD [ "npm", "run", "dev" ]
+
+FROM node:alpine
+
+WORKDIR /app
+
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/tsconfig.json ./
+
+EXPOSE 3000
+
+CMD [ "npm", "run", "dev:prisma" ]
