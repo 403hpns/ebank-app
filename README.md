@@ -13,17 +13,7 @@ The e-Bank App is a simulated electronic banking application that enables you to
 <h2>Install</h2>
 
 ```
-npm install
-```
-
-```
-npm run dev
-```
-
-or
-
-```
-docker-compose up --build
+docker-compose up --build -d
 ```
 
 <h2>To-do List</h2>
