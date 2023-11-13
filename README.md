@@ -8,12 +8,16 @@ The e-Bank App is a simulated electronic banking application that enables you to
 </p>
 
 <h2>Live demo</h2>
-<p>You can find live demo here:</p>
+<p>You can find live demo here: [403hpns.dev/projects/ebank](https://403hpns.dev/projects/ebank/login)</p>
+
 
 <h2>Install</h2>
 
 ```
 docker-compose up --build -d
+```
+```
+http://localhost:3001
 ```
 
 <h2>To-do List</h2>
