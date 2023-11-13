@@ -8,7 +8,7 @@ The e-Bank App is a simulated electronic banking application that enables you to
 </p>
 
 <h2>Live demo</h2>
-<p>You can find live demo here: [403hpns.dev/projects/ebank](https://403hpns.dev/projects/ebank/login)</p>
+<p>You can find live demo here: <a src="https://403hpns.dev/projects/ebank">403hpns.dev/projects/ebank</a></p>
 
 
 <h2>Install</h2>
