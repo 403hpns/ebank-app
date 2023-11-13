@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "dev:prisma": "prisma migrate dev && npm run dev"
+    "dev:migrate": "npx prisma migrate dev --name init --create-only && prisma migrate deploy && npm run dev"
   },
   "prisma": {
     "schema": "prisma/schema.prisma"

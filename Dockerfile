@@ -23,6 +23,4 @@ COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/tsconfig.json ./
 
-EXPOSE 3000
-
-CMD [ "npm", "run", "dev:prisma" ]
+CMD ["npm", "run", "dev:migrate"]

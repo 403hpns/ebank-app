@@ -1,25 +1,28 @@
-version: "3.9"
+version: "3.8"
 
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
+    stdin_open: true
+    tty: true
     container_name: app
     ports:
       - "3000:3000"
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres?schema=public
-      - NEXTAUTH_APP="https://localhost:3000/"
-      - NEXTAUTH_SECRET="YkzXH8QJf9IjFrKVXD7lsIridiWMyrWF"
-      - SECRET_KEY="VsbBPw5FBz9LLYfissJZtAlCHp3EgJqs"
+      - NEXTAUTH_APP=https://localhost:3000/
+      - NEXTAUTH_SECRET=YkzXH8QJf9IjFrKVXD7lsIridiWMyrWF
+      - SECRET_KEY=VsbBPw5FBz9LLYfissJZtAlCHp3EgJqs
     volumes:
       - .:/app
       - /app/node_modules
     networks:
       - ebank-net
     depends_on:
-      - db
+      db:
+        condition: service_healthy
   db:
     container_name: db
     image: postgres:16
@@ -34,6 +37,11 @@ services:
     networks:
       - ebank-net
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres-data:
